@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RadioPlayer Ecosystem - Radios Argentinas en Vivo</title>
+    <meta name="description" content="Ecosistema de radio streaming para Android. Escucha radios argentinas en vivo con RadioPlayer v7 y MediaCenter v2.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📻</text></svg>">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #141420;
+            --surface2: #1c1c2e;
+            --primary: #6c63ff;
+            --primary-glow: #6c63ff33;
+            --secondary: #00d4aa;
+            --accent: #ff6b6b;
+            --text: #ffffff;
+            --text2: #8888a0;
+            --text3: #555570;
+            --border: #2a2a3a;
+            --grad1: linear-gradient(135deg, #6c63ff, #00d4aa);
+            --grad2: linear-gradient(135deg, #ff6b6b, #6c63ff);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-grid {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, var(--primary-glow) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, #00d4aa15 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, #ff6b6b10 0%, transparent 50%);
+            z-index: -1;
+            animation: bgPulse 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bgPulse {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+            padding: 0 2rem;
+        }
+
+        nav .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        nav .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--grad1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav .nav-links a:hover { color: var(--primary); }
+
+        /* Hero */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 6px 18px;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 .grad {
+            background: var(--grad1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text2);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--grad1);
+            color: white;
+            box-shadow: 0 4px 20px var(--primary-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--primary-glow);
+        }
+
+        .btn-secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            background: #1c1c30;
+        }
+
+        .btn .icon { font-size: 1.2rem; }
+
+        /* Stats bar */
+        .stats {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .num {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--grad1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .label {
+            font-size: 0.85rem;
+            color: var(--text2);
+            margin-top: 4px;
+        }
+
+        /* Apps Section */
+        .apps-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--text2);
+            font-size: 1.05rem;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .apps-grid { grid-template-columns: 1fr; }
+        }
+
+        .app-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .app-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 40px var(--primary-glow);
+            transform: translateY(-4px);
+        }
+
+        .app-card-header {
+            padding: 2rem 2rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .app-icon {
+            width: 64px; height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .app-icon.rp { background: var(--grad1); }
+        .app-icon.mc { background: var(--grad2); }
+
+        .app-card-header .info h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .app-card-header .info .version {
+            font-size: 0.85rem;
+            color: var(--text2);
+        }
+
+        .app-card-body {
+            padding: 0 2rem 1rem;
+        }
+
+        .app-card-body p {
+            color: var(--text2);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 6px 0;
+            font-size: 0.9rem;
+            color: var(--text2);
+        }
+
+        .features-list li .check {
+            color: var(--secondary);
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .app-card-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .app-card-footer .size {
+            font-size: 0.85rem;
+            color: var(--text3);
+        }
+
+        /* Stations Section */
+        .stations-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .stations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .station-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .station-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .station-card .cover {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: var(--surface2);
+        }
+
+        .station-card .station-info {
+            padding: 1rem;
+        }
+
+        .station-card .station-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .station-card .station-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        .station-card .station-meta .badge {
+            background: var(--surface2);
+            border-radius: 6px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+        }
+
+        .station-card .station-meta .live-dot {
+            width: 6px; height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* How it works */
+        .how-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-card .step-num {
+            width: 44px; height: 44px;
+            background: var(--grad1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card p {
+            color: var(--text2);
+            font-size: 0.9rem;
+        }
+
+        /* Architecture */
+        .arch-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .arch-diagram {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            margin-top: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .arch-box {
+            background: var(--surface2);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .arch-box.highlight {
+            border-color: var(--primary);
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .arch-box h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .arch-box p {
+            font-size: 0.8rem;
+            color: var(--text2);
+        }
+
+        .arch-arrow {
+            font-size: 2rem;
+            color: var(--primary);
+            animation: arrowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes arrowPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* FAQ */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .faq-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-q {
+            padding: 1.2rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .faq-q:hover { background: var(--surface2); }
+
+        .faq-q .arrow {
+            transition: transform 0.3s;
+            color: var(--primary);
+        }
+
+        .faq-q.open .arrow { transform: rotate(180deg); }
+
+        .faq-a {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s;
+            color: var(--text2);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .faq-a.open {
+            padding: 0 1.5rem 1.2rem;
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text3);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover { text-decoration: underline; }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            nav .nav-links { display: none; }
+            .hero { padding: 4rem 1.5rem 3rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .hero-buttons { flex-direction: column; align-items: stretch; }
+            .btn { justify-content: center; }
+            .arch-diagram { flex-direction: column; }
+            .arch-arrow { transform: rotate(90deg); }
+        }
+
+        /* Smooth scroll */
+        html { scroll-behavior: smooth; }
+
+        /* Download counter animation */
+        .download-pulse {
+            animation: downloadPulse 2s infinite;
+        }
+
+        @keyframes downloadPulse {
+            0%, 100% { box-shadow: 0 4px 20px var(--primary-glow); }
+            50% { box-shadow: 0 4px 40px #6c63ff66; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-inner">
+            <div class="logo">
+                <div class="logo-icon">📻</div>
+                <span>RadioPlayer</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#apps">Apps</a></li>
+                <li><a href="#stations">Estaciones</a></li>
+                <li><a href="#how">Como Funciona</a></li>
+                <li><a href="#arch">Arquitectura</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="https://github.com/francisco154/radioplayer-ecosystem" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            Version Final 2.0
+        </div>
+        <h1>
+            Radios Argentinas<br>
+            <span class="grad">en tu Android</span>
+        </h1>
+        <p>
+            Ecosistema completo de radio streaming. Escucha las mejores radios de Argentina en vivo,
+            con favoritos sincronizados y notificaciones inteligentes.
+        </p>
+        <div class="hero-buttons">
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/v7.0/RadioPlayer-v7.apk"
+               class="btn btn-primary download-pulse" id="dl-rp">
+                <span class="icon">📱</span>
+                Descargar RadioPlayer v7
+            </a>
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.0/MediaCenter-v2.apk"
+               class="btn btn-secondary" id="dl-mc">
+                <span class="icon">🔔</span>
+                Descargar MediaCenter v2
+            </a>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="stat-card">
+            <div class="num">15+</div>
+            <div class="label">Radios en vivo</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">2</div>
+            <div class="label">Apps sincronizadas</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">MP3/AAC/HLS</div>
+            <div class="label">Formatos soportados</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">Android 7+</div>
+            <div class="label">Compatibilidad</div>
+        </div>
+    </div>
+
+    <!-- Apps -->
+    <section class="apps-section" id="apps">
+        <div class="section-header">
+            <h2>Dos Apps, Un Ecosistema</h2>
+            <p>RadioPlayer reproduce, MediaCenter notifica. Juntas funcionan mejor.</p>
+        </div>
+        <div class="apps-grid">
+            <!-- RadioPlayer Card -->
+            <div class="app-card">
+                <div class="app-card-header">
+                    <div class="app-icon rp">📻</div>
+                    <div class="info">
+                        <h3>RadioPlayer v7</h3>
+                        <div class="version">Version Final &bull; 14 MB</div>
+                    </div>
+                </div>
+                <div class="app-card-body">
+                    <p>
+                        Reproductor de radio streaming con tema oscuro estilo Spotify.
+                        Accede a las radios argentinas mas populares, guarda tus favoritos
+                        y controla la reproduccion desde una interfaz moderna.
+                    </p>
+                    <ul class="features-list">
+                        <li><span class="check">✓</span> Streaming en vivo (MP3, AAC, HLS/m3u8)</li>
+                        <li><span class="check">✓</span> Favoritos sincronizados entre apps</li>
+                        <li><span class="check">✓</span> Reproduccion en segundo plano</li>
+                        <li><span class="check">✓</span> Timer de apagado automatico</li>
+                        <li><span class="check">✓</span> Controles completos (Prev/Play/Next/Stop/Fav)</li>
+                        <li><span class="check">✓</span> Interfaz Material 3 con tema oscuro</li>
+                        <li><span class="check">✓</span> Login persistente con DataStore</li>
+                        <li><span class="check">✓</span> Reconexion automatica al perder conexion</li>
+                        <li><span class="check">✓</span> ExoPlayer (Media3) con WakeLock</li>
+                    </ul>
+                </div>
+                <div class="app-card-footer">
+                    <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/v7.0/RadioPlayer-v7.apk"
+                       class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">
+                        <span class="icon">⬇</span> Descargar APK
+                    </a>
+                    <span class="size">v7.0 &bull; 14 MB &bull; Android 7.0+</span>
+                </div>
+            </div>
+
+            <!-- MediaCenter Card -->
+            <div class="app-card">
+                <div class="app-card-header">
+                    <div class="app-icon mc">🔔</div>
+                    <div class="info">
+                        <h3>MediaCenter v2</h3>
+                        <div class="version">Version Final &bull; 11 MB</div>
+                    </div>
+                </div>
+                <div class="app-card-body">
+                    <p>
+                        Centro de notificaciones complementario para RadioPlayer.
+                        Muestra una notificacion persistente con controles de reproduccion
+                        y boton de favorito, accesible desde cualquier pantalla.
+                    </p>
+                    <ul class="features-list">
+                        <li><span class="check">✓</span> Notificacion persistente con controles</li>
+                        <li><span class="check">✓</span> Botones: Anterior, Play/Pause, Siguiente</li>
+                        <li><span class="check">✓</span> Boton de Favorito sincronizado</li>
+                        <li><span class="check">✓</span> Portada de la estacion en la notificacion</li>
+                        <li><span class="check">✓</span> Panel simple Iniciar/Detener notificacion</li>
+                        <li><span class="check">✓</span> Comunicacion via broadcasts con RadioPlayer</li>
+                        <li><span class="check">✓</span> Artista o frecuencia automatica</li>
+                        <li><span class="check">✓</span> Foreground Service confiable</li>
+                    </ul>
+                </div>
+                <div class="app-card-footer">
+                    <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.0/MediaCenter-v2.apk"
+                       class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem; background: var(--grad2);">
+                        <span class="icon">⬇</span> Descargar APK
+                    </a>
+                    <span class="size">v2.0 &bull; 11 MB &bull; Requiere RadioPlayer v7</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stations -->
+    <section class="stations-section" id="stations">
+        <div class="section-header">
+            <h2>Estaciones Disponibles</h2>
+            <p>Las mejores radios argentinas en la palma de tu mano</p>
+        </div>
+        <div class="stations-grid" id="stations-grid">
+            <!-- Populated by JavaScript -->
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="how-section" id="how">
+        <div class="section-header">
+            <h2>Como Funciona</h2>
+            <p>En 4 pasos simples estas escuchando radio</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">1</div>
+                <h3>Instalar RadioPlayer</h3>
+                <p>Descarga e instala RadioPlayer v7 en tu dispositivo Android. Inicia sesion con tus credenciales.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">2</div>
+                <h3>Instalar MediaCenter</h3>
+                <p>Descarga e instala MediaCenter v2. Abre la app y presiona "Iniciar Notificacion" para activar el servicio.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">3</div>
+                <h3>Elegir una Radio</h3>
+                <p>En RadioPlayer, navega por las categorias y toca una estacion. La radio comenzara a reproducirse en vivo.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">4</div>
+                <h3>Controlar desde Anywhere</h3>
+                <p>Usa la notificacion de MediaCenter para controlar la reproduccion, cambiar de estacion o marcar favoritos sin abrir RadioPlayer.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section class="arch-section" id="arch">
+        <div class="section-header">
+            <h2>Arquitectura del Ecosistema</h2>
+            <p>Comunicacion bidireccional via Broadcasts de Android</p>
+        </div>
+        <div class="arch-diagram">
+            <div class="arch-box highlight">
+                <h4>📻 RadioPlayer v7</h4>
+                <p>ExoPlayer + SharedPreferences<br>Foreground Service<br>FavoritesManager</p>
+            </div>
+            <div class="arch-arrow">
+                <div>◀──▶</div>
+                <div style="font-size: 0.7rem; color: var(--text2);">Broadcasts IPC</div>
+            </div>
+            <div class="arch-box highlight">
+                <h4>🔔 MediaCenter v2</h4>
+                <p>Notification Service<br>PlaybackReceiver<br>Command Sender</p>
+            </div>
+        </div>
+        <div style="max-width: 800px; margin: 2rem auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="arch-box" style="font-size: 0.85rem;">
+                <h4 style="color: var(--secondary);">RP → MC</h4>
+                <p>PLAYBACK_UPDATE<br>PLAYBACK_STOPPED<br>(estado, estacion, fav)</p>
+            </div>
+            <div class="arch-box" style="font-size: 0.85rem;">
+                <h4 style="color: var(--accent);">MC → RP</h4>
+                <p>COMMAND_PLAY / PAUSE<br>COMMAND_NEXT / PREV<br>COMMAND_FAVORITE</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" id="faq">
+        <div class="section-header">
+            <h2>Preguntas Frecuentes</h2>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Necesito instalar ambas apps?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                No es obligatorio. RadioPlayer funciona perfectamente por si solo. MediaCenter es una app complementaria que agrega notificaciones persistentes con controles. Si queres controlar la reproduccion desde la barra de notificaciones sin abrir RadioPlayer, entonces si, instala ambas.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Como funciona la sincronizacion de favoritos?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                Ambas apps comparten los favoritos a traves del sistema de SharedPreferences de RadioPlayer. Cuando tocas el boton de favorito en MediaCenter, se envia un broadcast a RadioPlayer que actualiza la lista de favoritos inmediatamente. Lo mismo ocurre al reves. El Tab de Favoritos en RadioPlayer se actualiza en tiempo real sin importar desde donde se hizo el cambio.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Por que la app pide permiso de notificaciones?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                En Android 13+ (API 33), las apps necesitan permiso explicito para mostrar notificaciones. RadioPlayer lo necesita para el servicio de reproduccion en segundo plano (foreground service). MediaCenter lo necesita para mostrar los controles de reproduccion en la barra de notificaciones. Sin este permiso, la reproduccion en segundo plano puede ser interrumpida por el sistema.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>La reproduccion se corta cuando bloqueo la pantalla?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                No. RadioPlayer usa un Foreground Service con un WakeLock que mantiene la reproduccion activa incluso con la pantalla bloqueada. Si la app se cierra, el servicio continua. Ademas, tiene un sistema de reconexion automatica que intenta reconectar hasta 5 veces si se pierde la conexion.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Que formatos de streaming soporta?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                RadioPlayer soporta tres formatos de streaming principales: MP3 (el mas comun), AAC/AAC+ (mejor calidad a menor bitrate), y HLS/m3u8 (streaming adaptativo). Todos son manejados por ExoPlayer (Media3) de Google, que es el motor de reproduccion mas confiable en Android.
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">
+                <span>Como instalo los APKs?</span>
+                <span class="arrow">▼</span>
+            </div>
+            <div class="faq-a">
+                1) Descarga el archivo APK desde los links de esta pagina. 2) En tu dispositivo Android, ve a Configuracion > Seguridad y habilita "Instalar desde fuentes desconocidas" (o "Origenes desconocidos"). 3) Abre el archivo APK descargado y confirma la instalacion. 4) Primero instala RadioPlayer, luego MediaCenter.
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            RadioPlayer Ecosystem &bull; Hecho con ❤ en Argentina
+            <br>
+            <a href="https://github.com/francisco154/radioplayer-ecosystem">GitHub</a> &bull;
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases">Releases</a> &bull;
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/issues">Issues</a>
+        </p>
+    </footer>
+
+    <script>
+        // FAQ toggle
+        function toggleFaq(el) {
+            const answer = el.nextElementSibling;
+            const isOpen = el.classList.contains('open');
+            // Close all
+            document.querySelectorAll('.faq-q').forEach(q => q.classList.remove('open'));
+            document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+            // Toggle current
+            if (!isOpen) {
+                el.classList.add('open');
+                answer.classList.add('open');
+            }
+        }
+
+        // Fetch and display stations
+        async function loadStations() {
+            try {
+                const res = await fetch('https://demotester-v2.vercel.app/api/export/categories.json');
+                const data = await res.json();
+                const grid = document.getElementById('stations-grid');
+                let html = '';
+
+                data.categories.forEach(cat => {
+                    cat.stations.forEach(station => {
+                        const genre = station.genre || '';
+                        const freq = station.frequency || '';
+                        const location = station.location || '';
+                        const meta = [genre, freq, location].filter(Boolean).join(' &bull; ');
+
+                        html += `
+                        <div class="station-card">
+                            <img class="cover" src="${station.coverImage}" alt="${station.name}"
+                                 onerror="this.style.background='var(--surface2)'; this.style.height='80px';">
+                            <div class="station-info">
+                                <div class="station-name">${station.name}</div>
+                                <div class="station-meta">
+                                    <span class="live-dot"></span>
+                                    <span class="badge">En vivo</span>
+                                    <span>${meta}</span>
+                                </div>
+                            </div>
+                        </div>`;
+                    });
+                });
+
+                grid.innerHTML = html;
+            } catch (e) {
+                document.getElementById('stations-grid').innerHTML =
+                    '<p style="color:var(--text2);text-align:center;grid-column:1/-1;">No se pudieron cargar las estaciones. Intenta recargar la pagina.</p>';
+            }
+        }
+
+        loadStations();
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
