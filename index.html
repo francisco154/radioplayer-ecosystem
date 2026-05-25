@@ -928,38 +928,48 @@
             }
         }
 
-        // Fetch and display stations
+        // Fetch and display stations (filtered: only real radio stations)
         async function loadStations() {
             try {
                 const res = await fetch('https://demotester-v2.vercel.app/api/export/categories.json');
                 const data = await res.json();
                 const grid = document.getElementById('stations-grid');
                 let html = '';
+                let count = 0;
 
-                data.categories.forEach(cat => {
-                    cat.stations.forEach(station => {
-                        const genre = station.genre || '';
-                        const freq = station.frequency || '';
-                        const location = station.location || '';
-                        const meta = [genre, freq, location].filter(Boolean).join(' &bull; ');
+                // Hidden categories that are not real radio stations
+                const HIDDEN_CATEGORIES = ['Demos', 'Escena'];
 
-                        html += `
-                        <div class="station-card">
-                            <img class="cover" src="${station.coverImage}" alt="${station.name}"
-                                 onerror="this.style.background='var(--surface2)'; this.style.height='80px';">
-                            <div class="station-info">
-                                <div class="station-name">${station.name}</div>
-                                <div class="station-meta">
-                                    <span class="live-dot"></span>
-                                    <span class="badge">En vivo</span>
-                                    <span>${meta}</span>
+                data.categories
+                    .filter(cat => !HIDDEN_CATEGORIES.includes(cat.name))
+                    .forEach(cat => {
+                        cat.stations.forEach(station => {
+                            const genre = station.genre || '';
+                            const freq = station.frequency || '';
+                            const location = station.location || '';
+                            const meta = [genre, freq, location].filter(Boolean).join(' &bull; ');
+
+                            html += `
+                            <div class="station-card">
+                                <img class="cover" src="${station.coverImage}" alt="${station.name}"
+                                     onerror="this.style.background='var(--surface2)'; this.style.height='80px';">
+                                <div class="station-info">
+                                    <div class="station-name">${station.name}</div>
+                                    <div class="station-meta">
+                                        <span class="live-dot"></span>
+                                        <span class="badge">En vivo</span>
+                                        <span>${meta}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>`;
+                            </div>`;
+                            count++;
+                        });
                     });
-                });
 
                 grid.innerHTML = html;
+                // Update the stat counter
+                const statNum = document.querySelector('.stat-card .num');
+                if (statNum) statNum.textContent = count + '+';
             } catch (e) {
                 document.getElementById('stations-grid').innerHTML =
                     '<p style="color:var(--text2);text-align:center;grid-column:1/-1;">No se pudieron cargar las estaciones. Intenta recargar la pagina.</p>';
