@@ -688,12 +688,17 @@
             <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/v7.0/RadioPlayer-v7.apk"
                class="btn btn-primary download-pulse" id="dl-rp">
                 <span class="icon">📱</span>
-                Descargar RadioPlayer v7
+                RadioPlayer v7
             </a>
-            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.0/MediaCenter-v2.apk"
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/radioplayer-tv-v5.0/RadioPlayerTV-v5.apk"
+               class="btn btn-primary" id="dl-tv" style="background: linear-gradient(135deg, #E040FB, #6C63FF);">
+                <span class="icon">📺</span>
+                RadioPlayer TV v5
+            </a>
+            <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.5/MediaCenter-v2.5.apk"
                class="btn btn-secondary" id="dl-mc">
                 <span class="icon">🔔</span>
-                Descargar MediaCenter v2
+                MediaCenter v2.5
             </a>
         </div>
     </section>
@@ -705,8 +710,8 @@
             <div class="label">Radios en vivo</div>
         </div>
         <div class="stat-card">
-            <div class="num">2</div>
-            <div class="label">Apps sincronizadas</div>
+            <div class="num">3</div>
+            <div class="label">Apps del ecosistema</div>
         </div>
         <div class="stat-card">
             <div class="num">MP3/AAC/HLS</div>
@@ -721,8 +726,8 @@
     <!-- Apps -->
     <section class="apps-section" id="apps">
         <div class="section-header">
-            <h2>Dos Apps, Un Ecosistema</h2>
-            <p>RadioPlayer reproduce, MediaCenter notifica. Juntas funcionan mejor.</p>
+            <h2>Tres Apps, Un Ecosistema</h2>
+            <p>RadioPlayer reproduce, RadioPlayer TV en tu TV, MediaCenter controla.</p>
         </div>
         <div class="apps-grid">
             <!-- RadioPlayer Card -->
@@ -766,33 +771,65 @@
                 <div class="app-card-header">
                     <div class="app-icon mc">🔔</div>
                     <div class="info">
-                        <h3>MediaCenter v2</h3>
-                        <div class="version">Version Final &bull; 11 MB</div>
+                        <h3>MediaCenter v2.5</h3>
+                        <div class="version">Notificaciones + Control TV &bull; 11 MB</div>
                     </div>
                 </div>
                 <div class="app-card-body">
                     <p>
-                        Centro de notificaciones complementario para RadioPlayer.
-                        Muestra una notificacion persistente con controles de reproduccion
-                        y boton de favorito, accesible desde cualquier pantalla.
+                        Centro de notificaciones y control remoto para RadioPlayer y RadioPlayer TV.
+                        Notificaciones con controles y mando a distancia para tu TV via codigo OTP.
                     </p>
                     <ul class="features-list">
                         <li><span class="check">✓</span> Notificacion persistente con controles</li>
                         <li><span class="check">✓</span> Botones: Anterior, Play/Pause, Siguiente</li>
                         <li><span class="check">✓</span> Boton de Favorito sincronizado</li>
-                        <li><span class="check">✓</span> Portada de la estacion en la notificacion</li>
+                        <li><span class="check">✓</span> Control remoto para Android TV via OTP</li>
+                        <li><span class="check">✓</span> Vinculacion segura con codigo de 6 digitos</li>
+                        <li><span class="check">✓</span> Botones TV: Atras, Play, Pausa, Sig, Fav, Stop</li>
                         <li><span class="check">✓</span> Panel simple Iniciar/Detener notificacion</li>
-                        <li><span class="check">✓</span> Comunicacion via broadcasts con RadioPlayer</li>
-                        <li><span class="check">✓</span> Artista o frecuencia automatica</li>
-                        <li><span class="check">✓</span> Foreground Service confiable</li>
                     </ul>
                 </div>
                 <div class="app-card-footer">
-                    <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.0/MediaCenter-v2.apk"
+                    <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/mediacenter-v2.5/MediaCenter-v2.5.apk"
                        class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem; background: var(--grad2);">
                         <span class="icon">⬇</span> Descargar APK
                     </a>
-                    <span class="size">v2.0 &bull; 11 MB &bull; Requiere RadioPlayer v7</span>
+                    <span class="size">v2.5 &bull; 11 MB</span>
+                </div>
+            </div>
+
+            <!-- RadioPlayer TV Card -->
+            <div class="app-card" style="grid-column: span 2;">
+                <div class="app-card-header">
+                    <div class="app-icon" style="background: linear-gradient(135deg, #E040FB, #6C63FF);">📺</div>
+                    <div class="info">
+                        <h3>RadioPlayer TV v5</h3>
+                        <div class="version">Android TV &bull; 8 MB</div>
+                    </div>
+                </div>
+                <div class="app-card-body">
+                    <p>
+                        Version optimizada para Android TV y boxes TV. Interfaz de 5 columnas optimizada para D-pad,
+                        pantalla siempre encendida, y vinculacion con MediaCenter para control remoto desde el celular.
+                    </p>
+                    <ul class="features-list" style="columns: 2;">
+                        <li><span class="check">✓</span> Interfaz Android TV con D-pad</li>
+                        <li><span class="check">✓</span> Pantalla siempre encendida</li>
+                        <li><span class="check">✓</span> Vinculacion OTP con MediaCenter</li>
+                        <li><span class="check">✓</span> Control remoto desde el celular</li>
+                        <li><span class="check">✓</span> Codigo OTP visible en pantalla</li>
+                        <li><span class="check">✓</span> Favoritos sincronizados</li>
+                        <li><span class="check">✓</span> ExoPlayer con soporte MP3/AAC/HLS</li>
+                        <li><span class="check">✓</span> Leanback launcher compatible</li>
+                    </ul>
+                </div>
+                <div class="app-card-footer">
+                    <a href="https://github.com/francisco154/radioplayer-ecosystem/releases/download/radioplayer-tv-v5.0/RadioPlayerTV-v5.apk"
+                       class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem; background: linear-gradient(135deg, #E040FB, #6C63FF);">
+                        <span class="icon">⬇</span> Descargar APK
+                    </a>
+                    <span class="size">v5.0 &bull; 8 MB &bull; Android TV 5.0+</span>
                 </div>
             </div>
         </div>
@@ -813,28 +850,28 @@
     <section class="how-section" id="how">
         <div class="section-header">
             <h2>Como Funciona</h2>
-            <p>En 4 pasos simples estas escuchando radio</p>
+            <p>En simples pasos estas escuchando radio en cualquier dispositivo</p>
         </div>
         <div class="steps-grid">
             <div class="step-card">
                 <div class="step-num">1</div>
                 <h3>Instalar RadioPlayer</h3>
-                <p>Descarga e instala RadioPlayer v7 en tu dispositivo Android. Inicia sesion con tus credenciales.</p>
+                <p>Descarga e instala RadioPlayer v7 en tu celular o RadioPlayer TV v5 en tu Android TV.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">2</div>
                 <h3>Instalar MediaCenter</h3>
-                <p>Descarga e instala MediaCenter v2. Abre la app y presiona "Iniciar Notificacion" para activar el servicio.</p>
+                <p>Instala MediaCenter v2.5 en tu celular para notificaciones y control remoto de la TV.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">3</div>
-                <h3>Elegir una Radio</h3>
-                <p>En RadioPlayer, navega por las categorias y toca una estacion. La radio comenzara a reproducirse en vivo.</p>
+                <h3>Vincular con OTP</h3>
+                <p>En la TV aparece un codigo de 6 digitos. Ingresalo en MediaCenter para vincular ambos dispositivos.</p>
             </div>
             <div class="step-card">
                 <div class="step-num">4</div>
-                <h3>Controlar desde Anywhere</h3>
-                <p>Usa la notificacion de MediaCenter para controlar la reproduccion, cambiar de estacion o marcar favoritos sin abrir RadioPlayer.</p>
+                <h3>Controlar desde el Celular</h3>
+                <p>Usa MediaCenter como control remoto de la TV: Play, Pause, Siguiente, Favorito, todo desde tu celular.</p>
             </div>
         </div>
     </section>
@@ -847,26 +884,38 @@
         </div>
         <div class="arch-diagram">
             <div class="arch-box highlight">
-                <h4>📻 RadioPlayer v7</h4>
-                <p>ExoPlayer + SharedPreferences<br>Foreground Service<br>FavoritesManager</p>
+                <h4>📱 RadioPlayer v7</h4>
+                <p>Celular Android<br>ExoPlayer + Fav Sync<br>Foreground Service</p>
             </div>
             <div class="arch-arrow">
                 <div>◀──▶</div>
-                <div style="font-size: 0.7rem; color: var(--text2);">Broadcasts IPC</div>
+                <div style="font-size: 0.7rem; color: var(--text2);">Broadcasts</div>
             </div>
             <div class="arch-box highlight">
-                <h4>🔔 MediaCenter v2</h4>
-                <p>Notification Service<br>PlaybackReceiver<br>Command Sender</p>
+                <h4>🔔 MediaCenter v2.5</h4>
+                <p>Notificaciones +<br>Control Remoto TV<br>OTP Pairing</p>
+            </div>
+            <div class="arch-arrow">
+                <div>◀──▶</div>
+                <div style="font-size: 0.7rem; color: var(--text2);">OTP + Broadcasts</div>
+            </div>
+            <div class="arch-box highlight" style="border-color: #E040FB; box-shadow: 0 0 20px #E040FB33;">
+                <h4>📺 RadioPlayer TV v5</h4>
+                <p>Android TV<br>Screen Always On<br>OTP Receiver</p>
             </div>
         </div>
-        <div style="max-width: 800px; margin: 2rem auto 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div style="max-width: 900px; margin: 2rem auto 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
             <div class="arch-box" style="font-size: 0.85rem;">
                 <h4 style="color: var(--secondary);">RP → MC</h4>
                 <p>PLAYBACK_UPDATE<br>PLAYBACK_STOPPED<br>(estado, estacion, fav)</p>
             </div>
             <div class="arch-box" style="font-size: 0.85rem;">
-                <h4 style="color: var(--accent);">MC → RP</h4>
+                <h4 style="color: var(--accent);">MC → RP / TV</h4>
                 <p>COMMAND_PLAY / PAUSE<br>COMMAND_NEXT / PREV<br>COMMAND_FAVORITE</p>
+            </div>
+            <div class="arch-box" style="font-size: 0.85rem;">
+                <h4 style="color: #E040FB;">TV ↔ MC</h4>
+                <p>OTP_PAIR (vinculacion)<br>STATE_UPDATE (estado TV)<br>Control remoto via OTP</p>
             </div>
         </div>
     </section>
