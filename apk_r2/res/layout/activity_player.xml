@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:background="@color/bg_dark" android:clipChildren="false" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView android:id="@id/ivBackground" android:layout_width="fill_parent" android:layout_height="fill_parent" android:scaleType="centerCrop" android:alpha="0.15" />
+    <View android:background="@color/overlay_dark" android:layout_width="fill_parent" android:layout_height="fill_parent" />
+    <LinearLayout android:gravity="center" android:orientation="horizontal" android:padding="48.0dip" android:clipChildren="false" android:clipToPadding="false" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <androidx.cardview.widget.CardView android:layout_width="320.0dip" android:layout_height="320.0dip" app:cardCornerRadius="16.0dip" app:cardElevation="0.0dip" xmlns:app="http://schemas.android.com/apk/res-auto">
+            <ImageView android:id="@id/ivCoverLarge" android:layout_width="fill_parent" android:layout_height="fill_parent" android:src="@drawable/ic_radio" android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+        <LinearLayout android:gravity="center_vertical" android:orientation="vertical" android:clipChildren="false" android:clipToPadding="false" android:layout_width="0.0dip" android:layout_height="wrap_content" android:layout_marginLeft="48.0dip" android:layout_weight="1.0" android:layout_marginStart="48.0dip">
+            <TextView android:textSize="36.0sp" android:textColor="@color/white" android:ellipsize="end" android:id="@id/tvPlayerTitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:maxLines="2" android:fontFamily="sans-serif-bold" />
+            <TextView android:textSize="18.0sp" android:textColor="@color/text_secondary" android:ellipsize="end" android:id="@id/tvPlayerSubtitle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" android:maxLines="1" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/accent_blue" android:id="@id/tvPlayerGenre" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8.0dip" />
+            <TextView android:textSize="13.0sp" android:textColor="@color/accent_purple" android:id="@id/tvPlayerFrequency" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/text_secondary" android:ellipsize="end" android:id="@id/tvPlayerDescription" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="12.0dip" android:maxLines="3" android:lineSpacingExtra="4.0dip" />
+            <TextView android:textSize="14.0sp" android:textColor="@color/text_hint" android:id="@id/tvStatus" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="Conectando..." />
+            <TextView android:textSize="12.0sp" android:textColor="@color/accent_purple" android:id="@id/tvStationCounter" android:visibility="gone" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="4.0dip" />
+            <LinearLayout android:gravity="center_vertical" android:orientation="horizontal" android:clipChildren="false" android:clipToPadding="false" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="24.0dip">
+                <ImageButton android:id="@id/btnPrevious" android:src="@drawable/ic_skip_previous" android:contentDescription="Anterior" style="@style/StreamTVCircleButton.Medium" />
+                <ImageButton android:id="@id/btnPlayPause" android:src="@drawable/ic_pause" android:contentDescription="@string/play" android:layout_marginStart="12.0dip" android:layout_marginEnd="12.0dip" style="@style/StreamTVCircleButton.Large" />
+                <ImageButton android:id="@id/btnNext" android:src="@drawable/ic_skip_next" android:contentDescription="Siguiente" style="@style/StreamTVCircleButton.Medium" />
+                <View android:layout_width="24.0dip" android:layout_height="0.0dip" />
+                <ImageButton android:id="@id/btnFavorite" android:src="@drawable/ic_favorite_outline" android:contentDescription="Favorito" style="@style/StreamTVCircleButton.Medium" />
+            </LinearLayout>
+            <TextView android:textSize="12.0sp" android:textColor="@color/text_hint" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16.0dip" android:text="Presiona BACK para volver" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

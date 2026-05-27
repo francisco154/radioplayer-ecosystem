@@ -1,0 +1,29 @@
+version: 2.9.3
+apkFileName: RadioPlayerTV-v6.5-Exp-r2.apk
+isFrameworkApk: false
+usesFramework:
+  ids:
+  - 1
+  tag: null
+sdkInfo:
+  minSdkVersion: 21
+  targetSdkVersion: 36
+packageInfo:
+  forcedPackageId: 127
+  renameManifestPackage: null
+versionInfo:
+  versionCode: 21
+  versionName: 6.5-Exp-r2
+resourcesAreCompressed: false
+sharedLibrary: false
+sparseResources: false
+unknownFiles:
+  DebugProbesKt.bin: 8
+  okhttp3/internal/publicsuffix/NOTICE: 8
+  okhttp3/internal/publicsuffix/publicsuffixes.gz: 0
+doNotCompress:
+- resources.arsc
+- png
+- ogg
+- assets/dexopt/baseline.profm
+- assets/dexopt/baseline.prof

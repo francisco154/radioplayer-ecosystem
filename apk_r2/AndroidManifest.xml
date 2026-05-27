@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:compileSdkVersion="36" android:compileSdkVersionCodename="16" package="com.streamtv.app" platformBuildVersionCode="36" platformBuildVersionName="16">
+    <uses-feature android:name="android.hardware.type.tv" android:required="false"/>
+    <uses-feature android:name="android.software.leanback" android:required="false"/>
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <permission android:name="com.streamtv.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" android:protectionLevel="signature"/>
+    <uses-permission android:name="com.streamtv.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"/>
+    <application android:allowBackup="true" android:appComponentFactory="androidx.core.app.CoreComponentFactory" android:banner="@drawable/banner" android:extractNativeLibs="true" android:icon="@mipmap/ic_launcher" android:label="@string/app_name" android:name="com.streamtv.app.App" android:networkSecurityConfig="@xml/network_security_config" android:theme="@style/Theme.StreamTV" android:usesCleartextTraffic="true">
+        <activity android:exported="true" android:keepScreenOn="true" android:name="com.streamtv.app.ui.SplashActivity" android:screenOrientation="landscape" android:theme="@style/Theme.StreamTV.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:exported="false" android:keepScreenOn="true" android:name="com.streamtv.app.ui.LoginActivity" android:screenOrientation="landscape"/>
+        <activity android:exported="false" android:keepScreenOn="true" android:name="com.streamtv.app.ui.MainActivity" android:screenOrientation="landscape"/>
+        <activity android:exported="false" android:keepScreenOn="true" android:name="com.streamtv.app.ui.PlayerActivity" android:screenOrientation="landscape"/>
+        <activity android:exported="false" android:keepScreenOn="true" android:name="com.streamtv.app.ui.SettingsActivity" android:screenOrientation="landscape"/>
+        <receiver android:exported="true" android:name="com.streamtv.app.remote.RemoteControlReceiver">
+            <intent-filter>
+                <action android:name="com.radioplayer.tv.COMMAND_PLAY"/>
+                <action android:name="com.radioplayer.tv.COMMAND_PAUSE"/>
+                <action android:name="com.radioplayer.tv.COMMAND_PLAY_PAUSE"/>
+                <action android:name="com.radioplayer.tv.COMMAND_NEXT"/>
+                <action android:name="com.radioplayer.tv.COMMAND_PREVIOUS"/>
+                <action android:name="com.radioplayer.tv.COMMAND_FAVORITE"/>
+                <action android:name="com.radioplayer.tv.COMMAND_STOP"/>
+                <action android:name="com.radioplayer.tv.COMMAND_VOLUME_UP"/>
+                <action android:name="com.radioplayer.tv.COMMAND_VOLUME_DOWN"/>
+            </intent-filter>
+        </receiver>
+        <meta-data android:name="com.bumptech.glide.integration.okhttp3.OkHttpGlideModule" android:value="GlideModule"/>
+        <provider android:authorities="com.streamtv.app.androidx-startup" android:exported="false" android:name="androidx.startup.InitializationProvider">
+            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer" android:value="androidx.startup"/>
+            <meta-data android:name="androidx.lifecycle.ProcessLifecycleInitializer" android:value="androidx.startup"/>
+            <meta-data android:name="androidx.profileinstaller.ProfileInstallerInitializer" android:value="androidx.startup"/>
+        </provider>
+        <receiver android:directBootAware="false" android:enabled="true" android:exported="true" android:name="androidx.profileinstaller.ProfileInstallReceiver" android:permission="android.permission.DUMP">
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SKIP_FILE"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION"/>
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
